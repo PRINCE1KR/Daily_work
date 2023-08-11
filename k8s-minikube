@@ -1,0 +1,212 @@
+17  sudo apt update
+   18  sudo apt upgrade
+   19  sudo apt update
+   20  sudo apt install curl
+   21  curl -fsSL https://get.docker.com -o get-docker.sh
+   22  sudo sh get-docker.sh
+   23  sudo usermod -aG docker ubuntu
+   24  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+   25  chmod +x kubectl
+   26  sudo mv kubectl /usr/local/bin/
+   27  curl -LO "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
+   28  sudo install minikube-linux-amd64 /usr/local/bin/minikube
+   29  minikube start --driver=docker
+   30  sudo usermod -aG docker ubuntu
+   31  newgrp docker
+   32  kubectl version --short
+   33  kubectl get pods
+   34  kubectl get deploy
+   35  kubectl delete nginx
+   36  kubectl delete pod nginx
+   37  kubectl get pods
+   38  kubectl get all
+   39  vi pod.yml 
+   40  kubectl apply -f pod.yml 
+   41  kubectl get pods -o wide
+   42  minikube ssh
+   43  kubectl delete pods nginx
+   44  minikube ssh
+   45  vi deployment.yml
+   46  kubectl apply -f deployment.yml
+   47  kubectl get deploy
+   48  kubectl get pods
+   49  kubectl get rs
+   50  kubectl delete pods nginx-deployment-cbdccf466-wjcbk
+   51  kubectl get pods
+   52  kubectl delete pods nginx-deployment-cbdccf466-bq7xp
+   53  vi deployment.yml 
+   54  kubectl apply -f deployment.yml 
+   55  kubectl get pods
+   56  kubectl get pods -w
+   57  kubectl get LL
+   58  kubectl get all
+   59  kubectl delete pods nginx-deployment-cbdccf466-4d625
+   60  kubectl get all
+   61  kubectl delete deployment nginx-deployment
+   62  kubectl get all
+   63  kubectl apply -f deployment.yml 
+   64  kubecrl get deploy
+   65  kubecrl get deployment
+   66  kubectl get deployment
+   67  kubectl get pods
+   68  kubectl get pods -o wide
+   69  kubectl get pods -v=7
+   70  vim deployment.yml 
+   71  kubectl apply -f deployment.yml 
+   72  kubectl get pods -o wide
+   73  kubectl delete pods nginx-deployment-cbdccf466-tdsbz
+   74  kubectl get pods -o wide
+
+55  kubectl get pods
+   56  kubectl get pods -w
+   57  kubectl get LL
+   58  kubectl get all
+   59  kubectl delete pods nginx-deployment-cbdccf466-4d625
+   60  kubectl get all
+   61  kubectl delete deployment nginx-deployment
+   62  kubectl get all
+   63  kubectl apply -f deployment.yml 
+   64  kubecrl get deploy
+   65  kubecrl get deployment
+   66  kubectl get deployment
+   67  kubectl get pods
+   68  kubectl get pods -o wide
+   69  kubectl get pods -v=7
+   70  vim deployment.yml 
+   71  kubectl apply -f deployment.yml 
+   72  kubectl get pods -o wide
+   73  kubectl delete pods nginx-deployment-cbdccf466-tdsbz
+   74  kubectl get pods -o wide
+   75  history
+   76  vim service.yml
+   77  vi deployment.yml 
+   78  vim service.yml
+   79  kubectl apply -f service.yml 
+   80  kubectl get svc
+   81  minikube ip
+   82  curl 192.168.49.2
+   83  curl 192.168.49.2:30007
+   84  kubectl get svc
+   85  kubectl edit svc my-service
+   86  kubectl get svc
+   87  sudo vi /etc/hosts
+   88  kubectl get ingress
+   89  sudo vi /etc/hosts
+   90  ping f00.bar.com
+   91  ping foo.bar.com
+   92  curl foo.bar.com/bar
+   93  curl foo.bar.com
+   94  curl foo.bar.com/bar
+   95  curl foo.bar.com/bar:30007
+   96  kubectl get deploy
+   97  kubectl delete deploy nginx-deployment
+   98  kubectl get all
+   99  kubectl delete svc my-service
+  100  kubectl get all
+  101  kubectl get pods
+  102  vi cm.yml
+  103  kubectl apply -f cm.yml
+  104  kubectl get cm
+  105  kubectl describe cm test-cm
+  106  kubectl apply -f deployment.yml 
+  107  kubectl get pods -o wide
+  108  kubectl exec -it nginx-deployment-cbdccf466-gwd69 -- /bin/bash
+  109  vi deployment.yml 
+  110  kubectl apply -f deployment.yml 
+  111  kubectl ge tpods -w
+  112  kubectl ge pods -w
+  113  kubectl get pods -w
+  114  kubectl exec -it nginx-deployment-6c84bdcdbb-zrqcc -- /bin/bash
+  115  vi cm.yml 
+  116  kubectl exec -it nginx-deployment-6c84bdcdbb-zrqcc -- /bin/bash
+  117  vi deployment.yml 
+  118  kubectl apply -f deployment.yml 
+  119  vi deployment.yml 
+  120  kubectl apply -f deployment.yml 
+  121  kubectl get pods
+  122  kubectl exec -it nginx-deployment-75ff5555f9-c2vk8 -- /bin/bash
+  123  kubectl apply -f cm.yml
+  124  kubectl exec -it nginx-deployment-75ff5555f9-c2vk8 -- /bin/bash
+  125  kubectl describe cm.yml 
+  126  kubectl describe cm test-cm
+  127  kubectl exec -it nginx-deployment-75ff5555f9-c2vk8 -- /bin/bash
+  128  kubectl create secret generic test-secret --from-literal=db-port="3306"
+  129  kubectl describe secret test-secret
+  130  kubectl edit secret test-secret
+  131  echo MzMwNg== | base64 --decode
+
+kubectl get pods -v=7
+kubectl get pods -v=9  (which is maximum)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        volumeMounts:
+          - name: db-connection
+            mountPath: /opt
+        ports:
+        - containerPort: 80
+      volumes:
+        - name: db-connection
+          configMap:
+            name: test-cm
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: NodePort
+  selector:
+    app: nginx
+  ports:
+      # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
+    - port: 80
+      targetPort: 80
+      # Optional field
+      # By default and for convenience, the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
+      nodePort: 30007
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-wildcard-host
+spec:
+  rules:
+  - host: "foo.bar.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/bar"
+        backend:
+          service:
+            name: my-service
+            port:
+              number: 80
+~                        
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-cm
+data:
+  db-port: "3307"
+
+
