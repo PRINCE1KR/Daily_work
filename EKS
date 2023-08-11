@@ -1,0 +1,53 @@
+    1  sudo apt update
+    2  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    3  curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+    4  echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+    5  sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    6  kubectl version --client
+    7  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    8  unzip awscliv2.zip
+    9  sudo ./aws/install
+   10  sudo apt install unzip
+   11  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   12  unzip awscliv2.zip
+   13  sudo ./aws/install
+   14  /usr/local/bin/aws --version
+   15  eksctl version
+   16  curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+   17  curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+   18  tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+   19  # for ARM systems, set ARCH to: `arm64`, `armv6` or `armv7`
+   20  ARCH=amd64
+   21  PLATFORM=$(uname -s)_$ARCH
+   22  curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+   23  # (Optional) Verify checksum
+   24  curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+   25  tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+   26  sudo mv /tmp/eksctl /usr/local/bin
+   27  eksctl version
+   28  aws configure
+   29  eksctl create cluster --name demo-cluster-1 --region us-east-1 --fargate
+   30  kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
+   31  kubectl get pods -n game-2048
+   32  kubectl get pods
+   33  kubectl get pods -n game-2048
+   34  kubectl get svc -n game-2048
+   35  kubectl get ingress -n game-2048
+   36  eksctl utils associate-iam-oidc-provider --cluster demo-cluster-1 --approve
+   37  curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json
+   38  aws iam create-policy     --policy-name AWSLoadBalancerControllerIAMPolicy     --policy-document file://iam_policy.json
+   39  eksctl create iamserviceaccount   --cluster=demo-cluster-1   --namespace=kube-system   --name=aws-load-balancer-controller   --role-name AmazonEKSLoadBalancerControllerRole   --attach-policy-arn=arn:aws:iam::171983990511:policy/AWSLoadBalancerControllerIAMPolicy   --approve
+   40  helm repo add eks https://aws.github.io/eks-charts
+   41  sudo snap install helm
+   42  sudo apt install helm
+   43  sudo snap install helm --classic
+   44  helm repo add eks https://aws.github.io/eks-charts
+   45  helm repo update eks
+   46  helm install aws-load-balancer-controller eks/aws-load-balancer-controller \            
+   47  helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system   --set clusterName=demo-cluster-1   --set serviceAccount.create=false   --set serviceAccount.name=aws-load-balancer-controller   --set region=us-east-1   --set vpcId=vpc-00757379f13821b22
+   48  kubectl get deployment -n kube-system aws-load-balancer-controller
+   49  kubectl get deploy -n kube-system
+   50  kubectl get ingress -n game-2048
+
+eksctl delete cluster --name demo-cluster-1 --region us-east-1
+
